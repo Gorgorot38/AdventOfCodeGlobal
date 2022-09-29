@@ -1,0 +1,8 @@
+<div style="text-align: center;">
+  <mat-form-field>
+    <mat-label>Select A Year</mat-label>
+    <mat-select (selectionChange)="navigate($event)">
+      <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
