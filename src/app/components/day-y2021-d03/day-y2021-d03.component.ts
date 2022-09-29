@@ -13,6 +13,8 @@ export class DayY2021D03Component implements OnInit, OnChanges, OnDestroy {
 
   @Output() result: EventEmitter<string> = new EventEmitter<string>();
 
+  modifiedData: string[] = [];
+
   private readonly _destroying = new Subject<void>();
 
   constructor(private readonly _solverService: SolverService) {}
@@ -31,16 +33,43 @@ export class DayY2021D03Component implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
-      //do stuff
+      this.modifiedData = this.data.filter((val) => val);
     }
   }
 
   solvePartOne() {
-    return '';
+    let gamma = '';
+    let epsilon = '';
+    for (let idx = 0; idx < this.modifiedData[0].length; idx++) {
+      const currentArray = this.modifiedData.map((el) => el[idx]);
+      gamma += this.getCommonValue(currentArray, true);
+      epsilon += this.getCommonValue(currentArray, false);
+    }
+    this.result.emit((parseInt(gamma, 2) * parseInt(epsilon, 2)).toString())
   }
 
   solvePartTwo() {
     return '';
+  }
+
+  private getCommonValue(array: string[], most: boolean): string {
+    const map = new Map<string, number>();
+    array.forEach((el) => {
+      const current = map.get(el) ?? 0;
+      map.set(el, current + 1);
+    });
+
+    if (most) {
+      if ([...map.entries()].every((e) => e[1] == [...map.entries()][0][1])) {
+        return '1';
+      }
+      return [...map.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    } else {
+      if ([...map.entries()].every((e) => e[1] == [...map.entries()][0][1])) {
+        return '0';
+      }
+      return [...map.entries()].sort((a, b) => a[1] - b[1])[0][0];
+    }
   }
 
   ngOnDestroy(): void {
@@ -48,4 +77,3 @@ export class DayY2021D03Component implements OnInit, OnChanges, OnDestroy {
     this._destroying.complete();
   }
 }
-
