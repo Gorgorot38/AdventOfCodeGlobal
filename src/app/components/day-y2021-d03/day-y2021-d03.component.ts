@@ -49,7 +49,24 @@ export class DayY2021D03Component implements OnInit, OnChanges, OnDestroy {
   }
 
   solvePartTwo() {
-    return '';
+    let oxigens = [...this.modifiedData];
+    let co2s = [...this.modifiedData];
+
+    for (let idx = 0; idx < this.modifiedData[0].length; idx++) {
+      if (oxigens.length !== 1) {
+        const currentArray = oxigens.map((el) => el[idx]);
+        const mostCommon = this.getCommonValue(currentArray, true);
+        oxigens = oxigens.filter((o) => o[idx] === mostCommon);
+      }
+
+      if (co2s.length !== 1) {
+        const currentArray = co2s.map((el) => el[idx]);
+        const leastCommon = this.getCommonValue(currentArray, false);
+        co2s = co2s.filter((o) => o[idx] === leastCommon);
+      }
+    }
+
+    this.result.emit((parseInt(oxigens[0], 2) * parseInt(co2s[0], 2)).toString())
   }
 
   private getCommonValue(array: string[], most: boolean): string {
