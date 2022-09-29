@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "AdventOfCodeGlobal"
+  "defaultProject": "AdventOfCodeGlobal",
+  "cli": {
+    "analytics": "cd283437-1d12-40ae-8750-ad13ce84eccc"
+  }
 }
