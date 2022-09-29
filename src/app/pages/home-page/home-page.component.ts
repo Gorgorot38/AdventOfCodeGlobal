@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { Router } from '@angular/router';
 
 @Component({
