@@ -13,6 +13,8 @@ export class DayY2021D07Component implements OnInit, OnChanges, OnDestroy {
 
   @Output() result: EventEmitter<string> = new EventEmitter<string>();
 
+  working_data: number[] = [];
+
   private readonly _destroying = new Subject<void>();
 
   constructor(private readonly _solverService: SolverService) {}
@@ -35,12 +37,65 @@ export class DayY2021D07Component implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  initiVariables() {
+    this.working_data = this.data[0].split(',').map((v) => parseFloat(v));
+  }
+
   solvePartOne() {
-    return '';
+    this.initiVariables();
+
+    this.working_data.sort((a, b) => b - a);
+    const max = this.working_data[0];
+    this.working_data.sort((a, b) => a - b);
+    const min = this.working_data[0];
+
+    var fuel = Number.MAX_SAFE_INTEGER;
+    for (let idx = min; idx <= max; idx++) {
+      const tmpInput = [...this.working_data];
+      let tmpFuel = 0;
+      tmpInput.forEach((v) => {
+        tmpFuel += Math.abs(v - idx);
+      });
+
+      if (tmpFuel <= fuel) {
+        fuel = tmpFuel;
+      }
+    }
+
+    this.result.emit(fuel.toString());
   }
 
   solvePartTwo() {
-    return '';
+    this.initiVariables();
+
+    this.working_data.sort((a, b) => b - a);
+    const max = this.working_data[0];
+    this.working_data.sort((a, b) => a - b);
+    const min = this.working_data[0];
+
+    let fuel = Number.MAX_SAFE_INTEGER;
+    for (let idx = min; idx <= max; idx++) {
+      const tmpInput = [...this.working_data];
+      let tmpFuel = 0;
+      tmpInput.forEach((v) => {
+        let fuelCost = 1;
+        while (v !== idx) {
+          if (v >= idx) {
+            v--;
+          } else {
+            v++;
+          }
+          tmpFuel += fuelCost;
+          fuelCost++;
+        }
+      });
+
+      if (tmpFuel <= fuel) {
+        fuel = tmpFuel;
+      }
+    }
+
+    this.result.emit(fuel.toString());
   }
 
   ngOnDestroy(): void {
@@ -48,4 +103,3 @@ export class DayY2021D07Component implements OnInit, OnChanges, OnDestroy {
     this._destroying.complete();
   }
 }
-

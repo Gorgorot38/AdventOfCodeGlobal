@@ -52,7 +52,8 @@
 <form >
   <mat-form-field appearance="fill" style="width: 100%; text-align: center;">
     <mat-label [ngClass]="{'color-part-one': currentPart === 'one', 'color-part-two': currentPart === 'two'}">Result</mat-label>
-    <input [disabled]="true" matInput [value]="result" style="color: black;" />
+    <input *ngIf="day !== '23' || year !== '2021'" [disabled]="true" matInput [value]="result" style="color: black;" />
+    <textarea *ngIf="day === '23' && year === '2021'" [disabled]="true" [value]="result" style="color: black;" matInput></textarea>
   </mat-form-field>
 </form>
 
