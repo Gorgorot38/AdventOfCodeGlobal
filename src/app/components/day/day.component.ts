@@ -23,7 +23,13 @@ export class DayComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.data = this.httpClient.get(this.buildFilePath(), { responseType: 'text' }).pipe(
-      map((f) => f.split('\r\n')),
+      map((f) => {
+        if (f.includes('\r\n')) {
+          return f.split('\r\n');
+        } else {
+          return f.split('\n');
+        }
+      }),
       takeUntil(this._destroying)
     );
   }
