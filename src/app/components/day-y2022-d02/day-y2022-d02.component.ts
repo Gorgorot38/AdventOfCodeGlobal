@@ -29,8 +29,6 @@ export class DayY2022D02Component implements OnInit, OnDestroy {
       });
   }
 
-  initVariables() {}
-
   solvePartOne() {
     this.result.emit(
       this.data
@@ -55,7 +53,22 @@ export class DayY2022D02Component implements OnInit, OnDestroy {
     );
   }
 
-  letterToPlay(letter: string): PlaySign {
+  private roundOutcomePart1(opponent: string, you: string): number {
+    const opPlay = this.letterToPlay(opponent);
+    const youPlay = this.letterToPlay(you);
+
+    return this.signOutcome(opPlay, youPlay);
+  }
+
+  private roundOutcomePart2(opponent: string, you: string): number {
+    const opPlay = this.letterToPlay(opponent);
+    const outcome = this.letterToOutcome(you);
+    const youPlay = this.getSignFromOutcome(opPlay, outcome);
+
+    return this.signOutcome(opPlay, youPlay);
+  }
+
+  private letterToPlay(letter: string): PlaySign {
     switch (letter) {
       case 'A':
       case 'X':
@@ -69,7 +82,7 @@ export class DayY2022D02Component implements OnInit, OnDestroy {
     }
   }
 
-  letterToOutcome(letter: string): 'win' | 'draw' | 'lose' {
+  private letterToOutcome(letter: string): 'win' | 'draw' | 'lose' {
     switch (letter) {
       case 'X':
         return 'lose';
@@ -80,77 +93,32 @@ export class DayY2022D02Component implements OnInit, OnDestroy {
     }
   }
 
-  getSignFromOutcome(opponent: PlaySign, outcome: 'win' | 'draw' | 'lose'): PlaySign {
-    if (outcome === 'win') {
-      if (opponent === PlaySign.Paper) {
-        return PlaySign.Scissors;
-      } else if (opponent === PlaySign.Rock) {
-        return PlaySign.Paper;
+  private signOutcome(opponent: PlaySign, you: PlaySign) {
+    if (you < opponent) {
+      if (Math.abs(opponent - you) === 1) {
+        return you + 0;
       } else {
-        return PlaySign.Rock;
+        return you + 6;
       }
-    } else if (outcome === 'draw') {
-      if (opponent === PlaySign.Paper) {
-        return PlaySign.Paper;
-      } else if (opponent === PlaySign.Rock) {
-        return PlaySign.Rock;
+    } else if (you > opponent) {
+      if (Math.abs(opponent - you) === 1) {
+        return you + 6;
       } else {
-        return PlaySign.Scissors;
+        return you + 0;
       }
     } else {
-      if (opponent === PlaySign.Paper) {
-        return PlaySign.Rock;
-      } else if (opponent === PlaySign.Rock) {
-        return PlaySign.Scissors;
-      } else {
-        return PlaySign.Paper;
-      }
+      return you + 3;
     }
   }
 
-  roundOutcomePart1(opponent: string, you: string): number {
-    const opPlay = this.letterToPlay(opponent);
-    const youPlay = this.letterToPlay(you);
-
-    return this.signOutcome(opPlay, youPlay);
-  }
-
-  roundOutcomePart2(opponent: string, you: string): number {
-    const opPlay = this.letterToPlay(opponent);
-    const outcome = this.letterToOutcome(you);
-    const youPlay = this.getSignFromOutcome(opPlay, outcome);
-
-    return this.signOutcome(opPlay, youPlay);
-  }
-
-  signOutcome(opponent: PlaySign, you: PlaySign) {
-    if (you === PlaySign.Paper) {
-      const played = 2;
-      if (opponent === PlaySign.Paper) {
-        return played + 3;
-      } else if (opponent === PlaySign.Rock) {
-        return played + 6;
-      } else {
-        return played;
-      }
-    } else if (you === PlaySign.Rock) {
-      const played = 1;
-      if (opponent === PlaySign.Paper) {
-        return played + 0;
-      } else if (opponent === PlaySign.Rock) {
-        return played + 3;
-      } else {
-        return played + 6;
-      }
-    } else {
-      const played = 3;
-      if (opponent === PlaySign.Paper) {
-        return played + 6;
-      } else if (opponent === PlaySign.Rock) {
-        return played + 0;
-      } else {
-        return played + 3;
-      }
+  private getSignFromOutcome(opponent: PlaySign, outcome: 'win' | 'draw' | 'lose') {
+    switch (outcome) {
+      case 'draw':
+        return opponent;
+      case 'win':
+        return ((opponent + 1) % 4 || 1) as PlaySign;
+      case 'lose':
+        return ((opponent - 1) % 4 || 3) as PlaySign;
     }
   }
 
@@ -161,7 +129,7 @@ export class DayY2022D02Component implements OnInit, OnDestroy {
 }
 
 export enum PlaySign {
-  Rock,
-  Paper,
-  Scissors,
+  Rock = 1,
+  Paper = 2,
+  Scissors = 3,
 }
