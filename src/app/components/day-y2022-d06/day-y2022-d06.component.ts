@@ -58,7 +58,7 @@ export class DayY2022D06Component implements OnInit, OnDestroy {
       }
 
       if (this.marker.length === uniqueNum && this.marker.filter(this.onlyUnique).length === uniqueNum) {
-        break;
+        return letterNum;
       }
 
       letterNum++;
