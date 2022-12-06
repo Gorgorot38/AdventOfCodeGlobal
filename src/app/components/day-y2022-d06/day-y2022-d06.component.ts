@@ -8,10 +8,13 @@ import { SolverService } from 'src/app/services/solver.service';
   templateUrl: './day-y2022-d06.component.html',
   styleUrls: ['./day-y2022-d06.component.scss'],
 })
-export class DayY2022D06Component implements OnInit, OnChanges, OnDestroy {
+export class DayY2022D06Component implements OnInit, OnDestroy {
   @Input() data: string[] = [];
 
   @Output() result: EventEmitter<string> = new EventEmitter<string>();
+
+  marker: string[] = [];
+  packet: string;
 
   private readonly _destroying = new Subject<void>();
 
@@ -21,7 +24,7 @@ export class DayY2022D06Component implements OnInit, OnChanges, OnDestroy {
     this._solverService.daySelect$
       .pipe(
         filter((d) => d.day === '06' && d.year === '2022'),
-        takeUntil(this._destroying)
+        takeUntil(this._destroying),
       )
       .subscribe((d) => {
         if (d.isPart1) this.solvePartOne();
@@ -29,18 +32,42 @@ export class DayY2022D06Component implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
-      //do stuff
-    }
+  initVariables() {
+    this.marker = [];
+    this.packet = this.data[0];
   }
 
   solvePartOne() {
-    return '';
+    this.initVariables();
+
+    this.result.emit(this.getLetterNumber(4).toString());
   }
 
   solvePartTwo() {
-    return '';
+    this.initVariables();
+
+    this.result.emit(this.getLetterNumber(14).toString());
+  }
+
+  private getLetterNumber(uniqueNum: number) {
+    let letterNum = 1;
+    for (const letter of this.packet.split('')) {
+      this.marker.push(letter);
+      if (this.marker.length > uniqueNum) {
+        this.marker.shift();
+      }
+
+      if (this.marker.length === uniqueNum && this.marker.filter(this.onlyUnique).length === uniqueNum) {
+        break;
+      }
+
+      letterNum++;
+    }
+    return letterNum;
+  }
+
+  private onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
   }
 
   ngOnDestroy(): void {
@@ -48,4 +75,3 @@ export class DayY2022D06Component implements OnInit, OnChanges, OnDestroy {
     this._destroying.complete();
   }
 }
-
