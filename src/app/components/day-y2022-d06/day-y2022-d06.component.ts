@@ -49,7 +49,7 @@ export class DayY2022D06Component implements OnInit, OnDestroy {
     this.result.emit(this.getLetterNumber(14).toString());
   }
 
-  private getLetterNumber(uniqueNum: number) {
+  private getLetterNumber(uniqueNum: number): number {
     let letterNum = 1;
     for (const letter of this.packet.split('')) {
       this.marker.push(letter);
@@ -66,7 +66,7 @@ export class DayY2022D06Component implements OnInit, OnDestroy {
     return letterNum;
   }
 
-  private onlyUnique(value, index, self) {
+  private onlyUnique(value: unknown, index: number, self: unknown[]): boolean {
     return self.indexOf(value) === index;
   }
 
