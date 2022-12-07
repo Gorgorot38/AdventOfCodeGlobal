@@ -33,7 +33,7 @@ export class DayY2022D07Component implements OnInit, OnDestroy {
 
   initVariables() {
     this.tree = new TreeNode<number>('/');
-    let currentTree: TreeNode<number>;
+    let currentTree: TreeNode<number> = this.tree.find('/');
 
     this.data
       .filter((d) => d)
@@ -42,8 +42,8 @@ export class DayY2022D07Component implements OnInit, OnDestroy {
           const dir = c.split(' ')[2];
           if (dir == '..') {
             currentTree = currentTree.parent;
-          } else {
-            currentTree = this.tree.find(dir);
+          } else if (dir !== '/') {
+            currentTree = currentTree.findInChildren(dir);
           }
         } else if (c.startsWith('$ ls')) {
           const files = this.getListedFiles(idx);
@@ -76,15 +76,7 @@ export class DayY2022D07Component implements OnInit, OnDestroy {
   solvePartOne() {
     this.initVariables();
 
-    const map = new Map<string, number>();
-    this.tree.forEach((node: TreeNode<number>) => {
-      if (node.children && node.children.length > 0) {
-        map.set(
-          node.name,
-          node.getValues().reduce((prev, curr) => prev + curr, 0),
-        );
-      }
-    });
+    const map = this.getSizeMap();
 
     this.result.emit(
       Array.from(map.values())
@@ -94,8 +86,32 @@ export class DayY2022D07Component implements OnInit, OnDestroy {
     );
   }
 
+  private getSizeMap() {
+    const map = new Map<string, number>();
+    this.tree.forEach((node: TreeNode<number>) => {
+      if (node.children && node.children.length > 0) {
+        map.set(
+          node.getFullName(),
+          node.getValues().reduce((prev, curr) => prev + curr, 0),
+        );
+      }
+    });
+    return map;
+  }
+
   solvePartTwo() {
-    return '';
+    this.initVariables();
+
+    const map = this.getSizeMap();
+
+    const spaceToFree = 30000000 - (70000000 - this.tree.getValues().reduce((prev, curr) => prev + curr, 0));
+
+    this.result.emit(
+      Array.from(map.values())
+        .filter((v) => v >= spaceToFree)
+        .sort((a, b) => a - b)[0]
+        .toString(),
+    );
   }
 
   ngOnDestroy(): void {
@@ -111,20 +127,13 @@ export class TreeNode<T> {
   value: T;
 
   constructor(name: string, parent?: TreeNode<T>, value?: T) {
-    this.name = this.buildName(name);
+    this.name = name;
     this.parent = parent;
     this.value = value;
   }
 
-  buildName(name: string) {
-    if (this.parent) {
-      return `${this.parent.name}${name}`;
-    }
-    return name;
-  }
-
   addChild(name: string, value?: T): TreeNode<T> {
-    const child = new TreeNode<T>(this.buildName(name), this, value);
+    const child = new TreeNode<T>(name, this, value);
     if (!this.children) this.children = [];
     this.children.push(child);
     return child;
@@ -143,7 +152,6 @@ export class TreeNode<T> {
   }
 
   findInChildren(name: string): TreeNode<T> | null {
-    if (name === this.name) return this;
     if (this.children) {
       const target = this.children.find((c) => c.name === name);
       if (target) return target;
@@ -187,5 +195,12 @@ export class TreeNode<T> {
     }
 
     return this;
+  }
+
+  getFullName() {
+    if (this.parent) {
+      return this.parent.getFullName() + this.name;
+    }
+    return this.name;
   }
 }
