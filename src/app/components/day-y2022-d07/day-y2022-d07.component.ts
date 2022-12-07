@@ -8,10 +8,12 @@ import { SolverService } from 'src/app/services/solver.service';
   templateUrl: './day-y2022-d07.component.html',
   styleUrls: ['./day-y2022-d07.component.scss'],
 })
-export class DayY2022D07Component implements OnInit, OnChanges, OnDestroy {
+export class DayY2022D07Component implements OnInit, OnDestroy {
   @Input() data: string[] = [];
 
   @Output() result: EventEmitter<string> = new EventEmitter<string>();
+
+  tree: TreeNode<number>;
 
   private readonly _destroying = new Subject<void>();
 
@@ -21,7 +23,7 @@ export class DayY2022D07Component implements OnInit, OnChanges, OnDestroy {
     this._solverService.daySelect$
       .pipe(
         filter((d) => d.day === '07' && d.year === '2022'),
-        takeUntil(this._destroying)
+        takeUntil(this._destroying),
       )
       .subscribe((d) => {
         if (d.isPart1) this.solvePartOne();
@@ -29,14 +31,67 @@ export class DayY2022D07Component implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
-      //do stuff
+  initVariables() {
+    this.tree = new TreeNode<number>('/');
+    let currentTree: TreeNode<number>;
+
+    this.data
+      .filter((d) => d)
+      .forEach((c, idx) => {
+        if (c.startsWith('$ cd')) {
+          const dir = c.split(' ')[2];
+          if (dir == '..') {
+            currentTree = currentTree.parent;
+          } else {
+            currentTree = this.tree.find(dir);
+          }
+        } else if (c.startsWith('$ ls')) {
+          const files = this.getListedFiles(idx);
+          files.forEach((f) => {
+            if (f.startsWith('dir')) {
+              const dir = f.split(' ')[1];
+              currentTree.addChild(dir);
+            } else {
+              const fileName = f.split(' ')[1];
+              const filesize = Number(f.split(' ')[0]);
+              currentTree.addChild(fileName, filesize);
+            }
+          });
+        }
+      });
+  }
+
+  private getListedFiles(idx: number): string[] {
+    const files: string[] = [];
+    let inst = this.data[idx + 1];
+    let instIdx = idx + 1;
+    while (inst && !inst.startsWith('$')) {
+      files.push(inst);
+      instIdx++;
+      inst = this.data[instIdx];
     }
+    return files;
   }
 
   solvePartOne() {
-    return '';
+    this.initVariables();
+
+    const map = new Map<string, number>();
+    this.tree.forEach((node: TreeNode<number>) => {
+      if (node.children && node.children.length > 0) {
+        map.set(
+          node.name,
+          node.getValues().reduce((prev, curr) => prev + curr, 0),
+        );
+      }
+    });
+
+    this.result.emit(
+      Array.from(map.values())
+        .filter((v) => v <= 100000)
+        .reduce((prev, curr) => prev + curr, 0)
+        .toString(),
+    );
   }
 
   solvePartTwo() {
@@ -49,3 +104,88 @@ export class DayY2022D07Component implements OnInit, OnChanges, OnDestroy {
   }
 }
 
+export class TreeNode<T> {
+  parent: TreeNode<T>;
+  children: TreeNode<T>[];
+  name: string;
+  value: T;
+
+  constructor(name: string, parent?: TreeNode<T>, value?: T) {
+    this.name = this.buildName(name);
+    this.parent = parent;
+    this.value = value;
+  }
+
+  buildName(name: string) {
+    if (this.parent) {
+      return `${this.parent.name}${name}`;
+    }
+    return name;
+  }
+
+  addChild(name: string, value?: T): TreeNode<T> {
+    const child = new TreeNode<T>(this.buildName(name), this, value);
+    if (!this.children) this.children = [];
+    this.children.push(child);
+    return child;
+  }
+
+  find(name: string): TreeNode<T> | null {
+    if (name === this.name) return this;
+    if (this.children) {
+      for (const child of this.children) {
+        const target = child.find(name);
+        if (target) return target;
+      }
+    }
+
+    return null;
+  }
+
+  findInChildren(name: string): TreeNode<T> | null {
+    if (name === this.name) return this;
+    if (this.children) {
+      const target = this.children.find((c) => c.name === name);
+      if (target) return target;
+    }
+
+    return null;
+  }
+
+  root(): TreeNode<T> {
+    if (!this.parent) {
+      return this;
+    }
+    return this.parent.root();
+  }
+
+  getValues(): T[] {
+    let values = [];
+    if (this.children && this.children.length > 0) {
+      for (const child of this.children) {
+        child.getValues().forEach((v) => values.push(v));
+      }
+    } else if (this.value) {
+      values.push(this.value);
+    }
+    return values;
+  }
+
+  forEach(callback) {
+    if (typeof callback !== 'function') {
+      throw new TypeError('forEach() callback must be a function');
+    }
+
+    // run this node through function
+    callback(this);
+
+    // do the same for all children
+    if (this.children) {
+      for (const child of this.children) {
+        child.forEach(callback);
+      }
+    }
+
+    return this;
+  }
+}
