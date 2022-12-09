@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SolverService } from 'src/app/services/solver.service';
+import { onlyUnique } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-day-y2022-d06',
@@ -24,7 +25,7 @@ export class DayY2022D06Component implements OnInit, OnDestroy {
     this._solverService.daySelect$
       .pipe(
         filter((d) => d.day === '06' && d.year === '2022'),
-        takeUntil(this._destroying),
+        takeUntil(this._destroying)
       )
       .subscribe((d) => {
         if (d.isPart1) this.solvePartOne();
@@ -57,17 +58,13 @@ export class DayY2022D06Component implements OnInit, OnDestroy {
         this.marker.shift();
       }
 
-      if (this.marker.length === uniqueNum && this.marker.filter(this.onlyUnique).length === uniqueNum) {
+      if (this.marker.length === uniqueNum && this.marker.filter(onlyUnique).length === uniqueNum) {
         return letterNum;
       }
 
       letterNum++;
     }
     return letterNum;
-  }
-
-  private onlyUnique(value: unknown, index: number, self: unknown[]): boolean {
-    return self.indexOf(value) === index;
   }
 
   ngOnDestroy(): void {
