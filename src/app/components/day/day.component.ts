@@ -52,6 +52,10 @@ export class DayComponent implements OnInit, OnDestroy {
     this.result = res;
   }
 
+  displayTextArea(): boolean {
+    return (this.day === '23' && this.year === '2021') || (this.day === '10' && this.year === '2022');
+  }
+
   ngOnDestroy(): void {
     this._destroying.next();
     this._destroying.complete();
