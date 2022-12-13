@@ -70,8 +70,6 @@ export class DayY2022D13Component implements OnInit, OnDestroy {
       }
     });
 
-    console.log(sorted);
-
     this.result.emit(((sorted.findIndex((p) => _.isEqual(p, [[2]])) + 1) * (sorted.findIndex((p) => _.isEqual(p, [[6]])) + 1)).toString());
   }
 
