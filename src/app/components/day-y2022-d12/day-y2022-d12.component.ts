@@ -64,7 +64,7 @@ export class DayY2022D12Component implements OnInit, OnDestroy {
           this.buildEdge(down, j, currentNode, filteredData[i].length);
         }
 
-        currentNode.valueName = filteredData[i][j];
+        currentNode.value = filteredData[i][j];
 
         this.vertices.set(currentNode.name, currentNode);
       }
@@ -89,9 +89,9 @@ export class DayY2022D12Component implements OnInit, OnDestroy {
   solvePartOne() {
     this.initVariables();
 
-    const endNode = Array.from(this.vertices).find((e) => e[1].valueName === 'E')[1];
-    const startNode = Array.from(this.vertices).find((e) => e[1].valueName === 'S')[1];
-    this.result.emit(dijkstra(endNode, Number(startNode.name), this.vertices).toString());
+    const endNode = Array.from(this.vertices).find((e) => e[1].value === 'E')[1];
+    const startNode = Array.from(this.vertices).find((e) => e[1].value === 'S')[1];
+    this.result.emit(dijkstra(endNode, startNode.name, this.vertices).toString());
   }
 
   solvePartTwo() {
@@ -100,12 +100,12 @@ export class DayY2022D12Component implements OnInit, OnDestroy {
     const distances: number[] = [];
 
     const nodes = Array.from(this.vertices)
-      .filter((e) => e[1].valueName === 'S' || e[1].valueName === 'a')
+      .filter((e) => e[1].value === 'S' || e[1].value === 'a')
       .map((e) => _.cloneDeep(e[1]));
     nodes.forEach((node) => {
       this.initVertices(this.data.filter((d) => d));
-      const endNode = Array.from(this.vertices).find((e) => e[1].valueName === 'E')[1];
-      distances.push(dijkstra(endNode, Number(node.name), this.vertices));
+      const endNode = Array.from(this.vertices).find((e) => e[1].value === 'E')[1];
+      distances.push(dijkstra(endNode, node.name, this.vertices));
     });
     this.result.emit(distances.sort((a, b) => a - b)[0].toString());
   }

@@ -50,7 +50,7 @@ export class DayY2021D15Component implements OnInit, OnChanges, OnDestroy {
 
     this.buildGraph();
     const last = [...this.vertices][[...this.vertices].length - 1][1];
-    const count = dijkstra(last, 0, this.vertices);
+    const count = dijkstra(last, '0', this.vertices);
 
     this.result.emit(count.toString());
   }
@@ -61,7 +61,7 @@ export class DayY2021D15Component implements OnInit, OnChanges, OnDestroy {
     this.buildBiggerData();
     this.buildGraph();
     const last = [...this.vertices][[...this.vertices].length - 1][1];
-    const count = dijkstra(last, 0, this.vertices);
+    const count = dijkstra(last, '0', this.vertices);
 
     this.result.emit(count.toString());
   }

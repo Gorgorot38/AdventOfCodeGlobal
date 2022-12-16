@@ -6,7 +6,8 @@ export class Node {
   distance: number = Number.MAX_SAFE_INTEGER;
   isVisited = false;
   neighbors: Node[] = [];
-  valueName: string;
+  value: string | number;
+  isOpened = false;
 
   constructor(name: string, weight: number) {
     this.name = name;
@@ -14,10 +15,10 @@ export class Node {
   }
 }
 
-export function dijkstra(target: Node, startName: number, vertices: Map<string, Node>) {
+export function dijkstra(target: Node, startName: string, vertices: Map<string, Node>) {
   const queue = new PriorityQueue<Node>();
-  vertices.get(startName.toString()).distance = 0;
-  queue.insert(0, vertices.get(startName.toString()));
+  vertices.get(startName).distance = 0;
+  queue.insert(0, vertices.get(startName));
 
   while (!queue.isEmpty()) {
     const current = queue.pop();
