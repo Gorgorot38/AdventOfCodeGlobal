@@ -48,7 +48,11 @@ export class DayY2023D01Component implements OnInit, OnChanges, OnDestroy {
   }
 
   solvePartOne() {
-    const result = this.data
+    this.result.emit(this.alissonPart1().toString());
+  }
+
+  myPart1() {
+    return this.data
       .filter((str) => str)
       .reduce((acc, current) => {
         const first = current.split('').find((char) => /\d/.test(char));
@@ -58,12 +62,24 @@ export class DayY2023D01Component implements OnInit, OnChanges, OnDestroy {
           .find((char) => /\d/.test(char));
         return Number(`${first}${last}`) + acc;
       }, 0);
-    this.result.emit(result.toString());
+  }
+
+  alissonPart1() {
+    return this.data
+      .filter((str) => str)
+      .reduce((acc, current) => {
+        const group = current.match(/(\d)/g);
+        return Number(`${group[0]}${group[group.length - 1]}`) + acc;
+      }, 0);
   }
 
   solvePartTwo() {
+    this.result.emit(this.alissonPart2().toString());
+  }
+
+  myPart2() {
     const list = Array.from(this.map.entries()).reduce((acc, current) => acc.concat([current[0], current[1].toString()]), [] as string[]);
-    const result = this.data
+    return this.data
       .filter((str) => str)
       .reduce((acc, current) => {
         let firstIdx = 9999;
@@ -87,11 +103,24 @@ export class DayY2023D01Component implements OnInit, OnChanges, OnDestroy {
 
         return Number(`${this.getStrAsNumber(firstVal)}${this.getStrAsNumber(lastVal)}`) + acc;
       }, 0);
-    this.result.emit(result.toString());
+  }
+
+  alissonPart2() {
+    return this.data
+      .filter((str) => str)
+      .reduce((acc, current) => {
+        let match: RegExpExecArray;
+        let res = [];
+        const regex = /(\d|one|two|three|four|five|six|seven|eight|nine)/g;
+        while ((match = regex.exec(current))) {
+          res.push(match[0]);
+          regex.lastIndex = match.index + 1;
+        }
+        return Number(`${this.getStrAsNumber(res[0])}${this.getStrAsNumber(res[res.length - 1])}`) + acc;
+      }, 0);
   }
 
   private getStrAsNumber(str: string): string {
-    console.log(str);
     if (/\d/.test(str)) return str;
     return this.map.get(str).toString();
   }
