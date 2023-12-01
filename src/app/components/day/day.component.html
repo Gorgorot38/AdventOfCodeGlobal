@@ -48,12 +48,19 @@
 <app-day-y2022-d23 *ngIf="day === '23' && year === '2022'" [data]="data | async" (result)="catchResult($event)"></app-day-y2022-d23>
 <app-day-y2022-d24 *ngIf="day === '24' && year === '2022'" [data]="data | async" (result)="catchResult($event)"></app-day-y2022-d24>
 <app-day-y2022-d25 *ngIf="day === '25' && year === '2022'" [data]="data | async" (result)="catchResult($event)"></app-day-y2022-d25>
+<app-day-y2023-d01 *ngIf="day === '01' && year === '2023'" [data]="data | async" (result)="catchResult($event)"></app-day-y2023-d01>
 
-<form >
-  <mat-form-field appearance="fill" style="width: 100%; text-align: center;">
-    <mat-label [ngClass]="{'color-part-one': currentPart === 'one', 'color-part-two': currentPart === 'two'}">Result</mat-label>
-    <input *ngIf="!displayTextArea()" [disabled]="true" matInput [value]="result" style="color: black;" />
-    <textarea *ngIf="displayTextArea()" [disabled]="true" [value]="result" style="color: black;" matInput></textarea>
+<form>
+  <mat-form-field appearance="fill" style="width: 100%; text-align: center">
+    <mat-label
+      [ngClass]="{
+        'color-part-one': currentPart === 'one',
+        'color-part-two': currentPart === 'two'
+      }"
+      >Result</mat-label
+    >
+    <input *ngIf="!displayTextArea()" [disabled]="true" matInput [value]="result" style="color: black" />
+    <textarea *ngIf="displayTextArea()" [disabled]="true" [value]="result" style="color: black" matInput></textarea>
   </mat-form-field>
 </form>
 
