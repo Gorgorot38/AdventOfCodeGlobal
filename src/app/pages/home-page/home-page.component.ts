@@ -8,7 +8,7 @@ import { Router } from '@angular/router'
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent {
-  years = ['2021', '2022']
+  years = ['2021', '2022', '2023']
 
   constructor(private readonly _router: Router) {}
 
