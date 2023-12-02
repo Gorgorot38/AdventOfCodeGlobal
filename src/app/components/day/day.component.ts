@@ -30,7 +30,7 @@ export class DayComponent implements OnInit, OnDestroy {
           return f.split('\n');
         }
       }),
-      takeUntil(this._destroying)
+      takeUntil(this._destroying),
     );
   }
 
