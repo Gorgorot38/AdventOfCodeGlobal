@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SolverService } from 'src/app/services/solver.service';
@@ -111,12 +110,12 @@ export class DayY2023D03Component implements OnInit, OnChanges, OnDestroy {
       const positions: Engine[] = [];
       for (let w = 0; w < l.length; w++) {
         if (!/\d/.test(l[w])) {
-          if (positions.length > 0) allPositions.push(_.cloneDeep(positions));
+          if (positions.length > 0) allPositions.push(JSON.parse(JSON.stringify(positions)));
           positions.length = 0;
         } else {
           positions.push({ num: l[w], x: w, y: idx });
           if (w === l.length - 1 && positions.length > 0) {
-            allPositions.push(_.cloneDeep(positions));
+            allPositions.push(JSON.parse(JSON.stringify(positions)));
             positions.length = 0;
           }
         }
