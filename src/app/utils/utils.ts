@@ -60,3 +60,10 @@ export interface Heap<T> {
   key: number;
   value: T;
 }
+
+export function* range(start: number, end: number, step: number) {
+  while (start < end) {
+    yield start;
+    start += step;
+  }
+}
