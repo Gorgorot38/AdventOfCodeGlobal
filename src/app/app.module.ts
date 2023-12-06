@@ -69,6 +69,7 @@ import { DayY2023D02Component } from './components/day-y2023-d02/day-y2023-d02.c
 import { DayY2023D03Component } from './components/day-y2023-d03/day-y2023-d03.component';
 import { DayY2023D04Component } from './components/day-y2023-d04/day-y2023-d04.component';
 import { DayY2023D05Component } from './components/day-y2023-d05/day-y2023-d05.component';
+import { DayY2023D06Component } from './components/day-y2023-d06/day-y2023-d06.component';
 
 const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInputModule];
 @NgModule({
@@ -134,6 +135,7 @@ const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInp
     DayY2023D03Component,
     DayY2023D04Component,
     DayY2023D05Component,
+    DayY2023D06Component,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ReactiveFormsModule, [...matModules], HttpClientModule, FormsModule],
   providers: [],
