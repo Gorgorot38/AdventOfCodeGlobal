@@ -24,6 +24,7 @@
     "@angular/router": "^17.0.5",
     "@types/uuid": "^8.3.4",
     "compute-lcm": "^1.1.2",
+    "just-clone": "^6.2.0",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0",
     "uuid": "^9.0.0",
