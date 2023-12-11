@@ -74,6 +74,7 @@ export class DayY2023D10Component implements OnInit, OnChanges, OnDestroy {
 
   solvePartTwo() {
     const vertices: Point[] = [];
+    const coordinates = new Set<string>();
     const startY = this.data.findIndex((d) => d.includes('S'));
     const startX = this.data[startY].indexOf('S');
     let step = 0;
@@ -92,6 +93,7 @@ export class DayY2023D10Component implements OnInit, OnChanges, OnDestroy {
       const bottom = new Pipe(this.data[y + 1] ? this.data[y + 1][x] : '.', x, y + 1, 'bottom');
 
       vertices.push({ x: x, y: y });
+      coordinates.add(`${x};${y}`);
 
       if (current.isConnectedTo(left) && !left.isEqual(previousStep)) {
         x--;
@@ -110,7 +112,7 @@ export class DayY2023D10Component implements OnInit, OnChanges, OnDestroy {
 
     const res = this.data.reduce((acc, current, idxY) => {
       const toAdd = current.split('').reduce((acc2, current2, idxX) => {
-        if (vertices.every((p) => p.x !== idxX || p.y !== idxY) && this.pointInPolygon({ x: idxX, y: idxY }, vertices)) {
+        if (!coordinates.has(`${idxX};${idxY}`) && this.pointInPolygon({ x: idxX, y: idxY }, vertices)) {
           return acc2 + 1;
         }
         return acc2;
