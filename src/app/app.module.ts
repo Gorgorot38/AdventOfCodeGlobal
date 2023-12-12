@@ -60,11 +60,6 @@ import { DayY2022D23Component } from './components/day-y2022-d23/day-y2022-d23.c
 import { DayY2022D24Component } from './components/day-y2022-d24/day-y2022-d24.component';
 import { DayY2022D25Component } from './components/day-y2022-d25/day-y2022-d25.component';
 import { DayY2023D01Component } from './components/day-y2023-d01/day-y2023-d01.component';
-import { DayComponent } from './components/day/day.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { YearY2021Component } from './pages/year-y2021/year-y2021.component';
-import { YearY2022Component } from './pages/year-y2022/year-y2022.component';
-import { YearY2023Component } from './pages/year-y2023/year-y2023.component';
 import { DayY2023D02Component } from './components/day-y2023-d02/day-y2023-d02.component';
 import { DayY2023D03Component } from './components/day-y2023-d03/day-y2023-d03.component';
 import { DayY2023D04Component } from './components/day-y2023-d04/day-y2023-d04.component';
@@ -75,6 +70,12 @@ import { DayY2023D08Component } from './components/day-y2023-d08/day-y2023-d08.c
 import { DayY2023D09Component } from './components/day-y2023-d09/day-y2023-d09.component';
 import { DayY2023D10Component } from './components/day-y2023-d10/day-y2023-d10.component';
 import { DayY2023D11Component } from './components/day-y2023-d11/day-y2023-d11.component';
+import { DayY2023D12Component } from './components/day-y2023-d12/day-y2023-d12.component';
+import { DayComponent } from './components/day/day.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { YearY2021Component } from './pages/year-y2021/year-y2021.component';
+import { YearY2022Component } from './pages/year-y2022/year-y2022.component';
+import { YearY2023Component } from './pages/year-y2023/year-y2023.component';
 
 const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInputModule];
 @NgModule({
@@ -146,6 +147,7 @@ const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInp
     DayY2023D09Component,
     DayY2023D10Component,
     DayY2023D11Component,
+    DayY2023D12Component,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ReactiveFormsModule, [...matModules], HttpClientModule, FormsModule],
   providers: [],

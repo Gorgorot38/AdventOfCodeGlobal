@@ -44,7 +44,8 @@ export class PriorityQueue<T> {
     let current = 0;
     while (this.hasLeft(current)) {
       let smallerChild = this.left(current);
-      if (this.hasRight(current) && this.heap[this.right(current)].key < this.heap[this.left(current)].key) smallerChild = this.right(current);
+      if (this.hasRight(current) && this.heap[this.right(current)].key < this.heap[this.left(current)].key)
+        smallerChild = this.right(current);
 
       if (this.heap[smallerChild].key > this.heap[current].key) break;
 
@@ -66,4 +67,18 @@ export function* range(start: number, end: number, step: number) {
     yield start;
     start += step;
   }
+}
+
+export function memoize<Args extends unknown[], T>(func: (...args: Args) => T): (...args: Args) => T {
+  const stored = new Map<string, T>();
+
+  return (...args) => {
+    const k = JSON.stringify(args);
+    if (stored.has(k)) {
+      return stored.get(k)!;
+    }
+    const result = func(...args);
+    stored.set(k, result);
+    return result;
+  };
 }
