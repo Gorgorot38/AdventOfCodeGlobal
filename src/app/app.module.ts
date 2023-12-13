@@ -71,6 +71,7 @@ import { DayY2023D09Component } from './components/day-y2023-d09/day-y2023-d09.c
 import { DayY2023D10Component } from './components/day-y2023-d10/day-y2023-d10.component';
 import { DayY2023D11Component } from './components/day-y2023-d11/day-y2023-d11.component';
 import { DayY2023D12Component } from './components/day-y2023-d12/day-y2023-d12.component';
+import { DayY2023D13Component } from './components/day-y2023-d13/day-y2023-d13.component';
 import { DayComponent } from './components/day/day.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { YearY2021Component } from './pages/year-y2021/year-y2021.component';
@@ -148,6 +149,7 @@ const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInp
     DayY2023D10Component,
     DayY2023D11Component,
     DayY2023D12Component,
+    DayY2023D13Component,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ReactiveFormsModule, [...matModules], HttpClientModule, FormsModule],
   providers: [],
