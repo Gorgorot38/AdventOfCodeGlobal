@@ -78,6 +78,7 @@ import { YearY2021Component } from './pages/year-y2021/year-y2021.component';
 import { YearY2022Component } from './pages/year-y2022/year-y2022.component';
 import { YearY2023Component } from './pages/year-y2023/year-y2023.component';
 import { DayY2023D14Component } from './components/day-y2023-d14/day-y2023-d14.component';
+import { DayY2023D15Component } from './components/day-y2023-d15/day-y2023-d15.component';
 
 const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInputModule];
 @NgModule({
@@ -152,6 +153,7 @@ const matModules = [MatSelectModule, MatButtonModule, MatExpansionModule, MatInp
     DayY2023D12Component,
     DayY2023D13Component,
     DayY2023D14Component,
+    DayY2023D15Component,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, ReactiveFormsModule, [...matModules], HttpClientModule, FormsModule],
   providers: [],
