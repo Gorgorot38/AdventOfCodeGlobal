@@ -16,7 +16,7 @@ export class DayY2023D16Component implements OnInit, OnChanges, OnDestroy {
 
   private readonly _destroying = new Subject<void>();
 
-  visited = new Map<string, Visited[]>();
+  visitedFaster = new Set<string>();
 
   constructor(private readonly _solverService: SolverService) {}
 
@@ -39,14 +39,10 @@ export class DayY2023D16Component implements OnInit, OnChanges, OnDestroy {
   }
 
   solvePartOne() {
-    this.visited.clear();
+    this.visitedFaster.clear();
     this.navigate('0;0', Direction.RIGHT);
-    const visited = new Set(
-      Array.from(this.visited.values())
-        .flat()
-        .map((v) => v.coordinates),
-    );
-    this.result.emit(visited.size.toString());
+
+    this.result.emit(this.getUniqueCoordinates().size.toString());
   }
 
   solvePartTwo() {
@@ -63,22 +59,14 @@ export class DayY2023D16Component implements OnInit, OnChanges, OnDestroy {
 
     let res = 0;
     edges.forEach((e) => {
-      this.visited.clear();
+      this.visitedFaster.clear();
       this.navigate(e.coordinates, e.direction);
-      const tmp = new Set(
-        Array.from(this.visited.values())
-          .flat()
-          .map((v) => v.coordinates),
-      ).size;
-      if (tmp > res) res = tmp;
+      if (this.getUniqueCoordinates().size > res) res = this.getUniqueCoordinates().size;
     });
     this.result.emit(res.toString());
   }
 
   navigate(initialPosition: string, direction: Direction) {
-    const id = getUniqueId(4);
-    this.visited.set(id, []);
-
     let currentDirection = direction;
 
     let x = Number(initialPosition.split(';')[0]);
@@ -87,14 +75,9 @@ export class DayY2023D16Component implements OnInit, OnChanges, OnDestroy {
       if (x < 0 || y < 0 || x >= this.data[0].length || y >= this.data.length) break;
 
       const currentVisited = { coordinates: `${x};${y}`, direction: currentDirection };
-      if (
-        Array.from(this.visited.values())
-          .flat()
-          .some((v) => dumbEquals(v, currentVisited))
-      )
-        break;
+      if (this.visitedFaster.has(this.visitedToString(currentVisited))) break;
 
-      this.visited.get(id).push(currentVisited);
+      this.visitedFaster.add(this.visitedToString(currentVisited));
 
       if (this.data[y][x] === '.') {
         ({ y, x } = this.handleThroughDirection(currentDirection, y, x));
@@ -162,6 +145,14 @@ export class DayY2023D16Component implements OnInit, OnChanges, OnDestroy {
         break;
     }
     return { y, x };
+  }
+
+  private visitedToString(v: Visited) {
+    return `${v.coordinates};${v.direction}`;
+  }
+
+  private getUniqueCoordinates() {
+    return new Set(Array.from(this.visitedFaster.values()).map((v) => `${v.split(';')[0]};${v.split(';')[1]}`));
   }
 
   ngOnDestroy(): void {
