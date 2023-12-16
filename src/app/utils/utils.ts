@@ -44,8 +44,7 @@ export class PriorityQueue<T> {
     let current = 0;
     while (this.hasLeft(current)) {
       let smallerChild = this.left(current);
-      if (this.hasRight(current) && this.heap[this.right(current)].key < this.heap[this.left(current)].key)
-        smallerChild = this.right(current);
+      if (this.hasRight(current) && this.heap[this.right(current)].key < this.heap[this.left(current)].key) smallerChild = this.right(current);
 
       if (this.heap[smallerChild].key > this.heap[current].key) break;
 
@@ -81,4 +80,23 @@ export function memoize<Args extends unknown[], T>(func: (...args: Args) => T): 
     stored.set(k, result);
     return result;
   };
+}
+
+/**
+ * generate groups of 4 random characters
+ * @example getUniqueId(1) : 607f
+ * @example getUniqueId(2) : 95ca-361a
+ * @example getUniqueId(4) : 6a22-a5e6-3489-896b
+ */
+export function getUniqueId(parts: number): string {
+  const stringArr = [];
+  for (let i = 0; i < parts; i++) {
+    const S4 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    stringArr.push(S4);
+  }
+  return stringArr.join('-');
+}
+
+export function dumbEquals(obj1: unknown, obj2: unknown) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
