@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SolverService } from 'src/app/services/solver.service';
-import { dumbEquals, getUniqueId } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-day-y2023-d16',
