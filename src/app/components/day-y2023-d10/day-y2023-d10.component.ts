@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { SolverService } from 'src/app/services/solver.service';
 import clone from 'just-clone';
+import { pointInPolygon } from 'src/app/utils/utils';
+import { Point } from '../day-y2021-d13/day-y2021-d13.component';
 
 @Component({
   selector: 'app-day-y2023-d10',
@@ -112,7 +114,7 @@ export class DayY2023D10Component implements OnInit, OnChanges, OnDestroy {
 
     const res = this.data.reduce((acc, current, idxY) => {
       const toAdd = current.split('').reduce((acc2, current2, idxX) => {
-        if (!coordinates.has(`${idxX};${idxY}`) && this.pointInPolygon({ x: idxX, y: idxY }, vertices)) {
+        if (!coordinates.has(`${idxX};${idxY}`) && pointInPolygon({ x: idxX, y: idxY }, vertices)) {
           return acc2 + 1;
         }
         return acc2;
@@ -123,36 +125,10 @@ export class DayY2023D10Component implements OnInit, OnChanges, OnDestroy {
     this.result.emit(res.toString());
   }
 
-  cross(x: Point, y: Point, z: Point): number {
-    return (y.x - x.x) * (z.y - x.y) - (z.x - x.x) * (y.y - x.y);
-  }
-
-  pointInPolygon(p: Point, points: Array<Point>): boolean {
-    let wn = 0; // winding number
-
-    points.forEach((a, i) => {
-      const b = points[(i + 1) % points.length];
-      if (a.y <= p.y) {
-        if (b.y > p.y && this.cross(a, b, p) > 0) {
-          wn += 1;
-        }
-      } else if (b.y <= p.y && this.cross(a, b, p) < 0) {
-        wn -= 1;
-      }
-    });
-
-    return wn !== 0;
-  }
-
   ngOnDestroy(): void {
     this._destroying.next();
     this._destroying.complete();
   }
-}
-
-export class Point {
-  x: number;
-  y: number;
 }
 
 export class Pipe {

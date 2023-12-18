@@ -100,3 +100,44 @@ export function getUniqueId(parts: number): string {
 export function dumbEquals(obj1: unknown, obj2: unknown) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
+
+export function pointInPolygon(p: Point, points: Array<Point>): boolean {
+  let wn = 0; // winding number
+
+  points.forEach((a, i) => {
+    const b = points[(i + 1) % points.length];
+    if (a.y <= p.y) {
+      if (b.y > p.y && cross(a, b, p) > 0) {
+        wn += 1;
+      }
+    } else if (b.y <= p.y && cross(a, b, p) < 0) {
+      wn -= 1;
+    }
+  });
+
+  return wn !== 0;
+}
+
+export function cross(x: Point, y: Point, z: Point): number {
+  return (y.x - x.x) * (z.y - x.y) - (z.x - x.x) * (y.y - x.y);
+}
+
+export class Point {
+  x: number;
+  y: number;
+}
+
+export function calculatePolygonArea(vertices: Point[]): number {
+  const n: number = vertices.length;
+  let area: number = 0.0;
+
+  for (let i = 0; i < n - 1; i++) {
+    area += vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y;
+  }
+
+  area += vertices[n - 1].x * vertices[0].y - vertices[0].x * vertices[n - 1].y;
+
+  area = Math.abs(area) / 2.0;
+
+  return area;
+}
