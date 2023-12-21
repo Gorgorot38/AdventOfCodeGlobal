@@ -127,6 +127,14 @@ export class Point {
   y: number;
 }
 
+export function stringToPoint(str: string): Point {
+  return { x: Number(str.split(';')[0]), y: Number(str.split(';')[1]) };
+}
+
+export function pointToString(point: Point): string {
+  return `${point.x};${point.y}`;
+}
+
 export function calculatePolygonArea(vertices: Point[]): number {
   const n: number = vertices.length;
   let area: number = 0.0;
